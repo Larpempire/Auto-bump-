@@ -1,7 +1,6 @@
 {
-  "name": "discord-bump-bot",
+  "name": "bump-bot",
   "version": "1.0.0",
-  "description": "Discord bump bot pentru Render",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
