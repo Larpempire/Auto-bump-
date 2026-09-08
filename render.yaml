@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: discord-bump-bot
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+    healthCheckPath: /health
