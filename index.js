@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, WebhookClient } = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const express = require('express');
 
 // ===== EXPRESS SERVER =====
@@ -17,25 +17,33 @@ const client = new Client({
 });
 
 const TOKEN = process.env.DISCORD_BOT_TOKEN;
-
-// Webhook-ul din variabile de mediu
-const webhook = new WebhookClient({ 
-  id: process.env.WEBHOOK_ID, 
-  token: process.env.WEBHOOK_TOKEN 
-});
+const BUMP_CHANNEL_ID = "1544266220566749194";
 
 async function sendBump() {
   try {
-    await webhook.send('/bump');
-    console.log('✅ Bump sent');
+    const channel = client.channels.cache.get(BUMP_CHANNEL_ID);
+    if (!channel) {
+      console.error('❌ Canalul nu a fost găsit!');
+      return;
+    }
+
+    // Trimite comanda /bump ca mesaj text (singura metodă care funcționează)
+    await channel.send('/bump');
+    console.log('✅ /bump trimis în canal');
+    
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error('❌ Eroare:', error);
   }
 }
 
 client.once('ready', () => {
-  console.log(`✅ Bot ${client.user.tag} is online!`);
+  console.log(`✅ Botul ${client.user.tag} este online!`);
+  console.log(`📢 Canal bump: ${BUMP_CHANNEL_ID}`);
+  
+  // Primul bump la 5 secunde
   setTimeout(sendBump, 5000);
+  
+  // Bump la fiecare 2 ore
   setInterval(sendBump, 2 * 60 * 60 * 1000);
 });
 
